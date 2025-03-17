@@ -1,8 +1,8 @@
 ﻿namespace Tutoria1;
 
-public interface IHazardousCargo
+public interface IHazardousNotifier
 {
-    
-    
-    
+
+    void SendNotificationAboutHazardousOccurance(string message);
+
 }
