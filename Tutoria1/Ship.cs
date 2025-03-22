@@ -76,7 +76,16 @@ public class Ship
 
    public void TransferContainer(string serialNumber, Ship ship)
    {
-      ship.LoadContainer(RemoveContainer(serialNumber));
+      var container = RemoveContainer(serialNumber);
+      try
+      {
+         ship.LoadContainer(container);
+      }
+      catch
+      {
+         LoadContainer(container);
+         throw;
+      }
    }
 
    public override string ToString()
@@ -91,4 +100,8 @@ public class Ship
       return description;
    }
 
+   public List<string> GetContainersSerialNumbers()
+   {
+      return Containers.Select(c => c.GetSerialNumber()).ToList();
+   }
 }
