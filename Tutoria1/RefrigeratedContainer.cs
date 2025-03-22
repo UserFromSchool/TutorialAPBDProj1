@@ -2,33 +2,47 @@
 
 public class RefrigeratedContainer : Container
 {
-    
-    public string Product { get; protected set; }
 
-    public RefrigeratedContainer(double height, double tareWeight, double depth, double maxPayload, string product) :
+    public readonly string Product;
+    public double Temperature { get; protected set; }
+
+    public RefrigeratedContainer(double height, double tareWeight, double depth, double maxPayload,
+        string product, double temperature) :
         base(height, tareWeight, depth, maxPayload)
     {
         Product = product;
+        Temperature = temperature;
     }
 
     protected override string GetContainerType()
     {
         return "C";
     }
+
+    public override void LoadCargo(double mass)
+    {
+        LoadCargo(mass, null);
+    }
     
-    public void LoadCargo(double mass, string product = "")
+    public void LoadCargo(double mass, string? product)
     {
         if (product != Product)
         {
-            throw new Exception("Can't load different product onto the Refrigerated Container!");
+            if (product == null)
+            {
+                throw new KeyNotFoundException("Can't load unknown product onto the Refrigerated Container!");
+            } 
+            throw new KeyNotFoundException("Can't load different product onto the Refrigerated Container!");
         }
-        
-        CargoMass += mass;
-        
-        if (CargoMass > MaxPayload)
-        {
-            throw new OverfillException($"Cannot load {mass} kg. Maximum payload is {MaxPayload} kg.");
-        }
+        base.LoadCargo(mass);
+    }
+    
+    public override string ToString()
+    {
+        var description = base.ToString();
+        description += $"Product: {Product}\n";
+        description += $"Temperature: {Temperature}\n";
+        return description;
     }
     
 }
